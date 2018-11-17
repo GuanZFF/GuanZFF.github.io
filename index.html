@@ -304,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/14/Spring-Security原理理解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/17/Spring-Bean的核心流程/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="GuanZF">
@@ -324,7 +324,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/11/14/Spring-Security原理理解/" class="post-title-link" itemprop="http://yoursite.com/index.html">Spring Security原理理解</a>
+                <a href="/2018/11/17/Spring-Bean的核心流程/" class="post-title-link" itemprop="http://yoursite.com/index.html">Spring Bean的核心流程</a>
               
             
           </h1>
@@ -349,12 +349,161 @@
                 
               
 
-              <time title="Created: 2018-11-14 22:25:44 / Modified: 23:08:01" itemprop="dateCreated datePublished" datetime="2018-11-14T22:25:44+08:00">2018-11-14</time>
+              <time title="Created: 2018-11-17 17:30:29" itemprop="dateCreated datePublished" datetime="2018-11-17T17:30:29+08:00">2018-11-17</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/14/Spring-Security原理理解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GuanZF">
+      <meta itemprop="description" content="Overlook the distance">
+      <meta itemprop="image" content="/images/default-avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Z.F Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/14/Spring-Security原理理解/" class="post-title-link" itemprop="http://yoursite.com/index.html">Spring Security认证、授权（4.2.6版本）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-14 22:25:44" itemprop="dateCreated datePublished" datetime="2018-11-14T22:25:44+08:00">2018-11-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-11-17 23:12:51" itemprop="dateModified" datetime="2018-11-17T23:12:51+08:00">2018-11-17</time>
               
             
           </span>
@@ -389,14 +538,39 @@
       
         
           
-            <h3 id="物品循环"><a href="#物品循环" class="headerlink" title="物品循环"></a>物品循环</h3><ul>
-<li>API提供了相关的对接接口</li>
-<li>CORE提供了核心插件</li>
-<li>SERVICE提供了链接数据库的相关接口</li>
-<li>SSO提供B端接口</li>
-<li>WEB提供C端接口</li>
+            <h3 id="Authentication流程"><a href="#Authentication流程" class="headerlink" title="Authentication流程"></a>Authentication流程</h3><h4 id="UsernamePasswordAuthenticationFilter认证流程"><a href="#UsernamePasswordAuthenticationFilter认证流程" class="headerlink" title="UsernamePasswordAuthenticationFilter认证流程"></a><strong>UsernamePasswordAuthenticationFilter</strong>认证流程</h4><ul>
+<li><strong>FilterChainProxy</strong> Spring Security注入filter的代理，通过<code>VirtualFilterChain</code>进行filter的链式调用</li>
+<li><strong>UsernamePasswordAuthenticationFilter</strong> 进行认证的filter(调用时传入的参数是<code>username、password</code>)，此filter会进行用户的认证，认证成功或时候是的逻辑执行</li>
+<li><strong>AuthenticationManager</strong> 认证用户信息（实现类<code>ProviderManager</code>）</li>
+<li><strong>AuthenticationProvider</strong>  认证用户信息，此接口的实现类DaoAuthenticationProvider、RememberMeAuthenticationProvider等，下面的调用方式以DaoAuthenticationProvider为例</li>
+<li><strong>DaoAuthenticationProvider</strong> 认证是通过调用<code>UserDetailsService</code>的实现类，此实现类会根据系统提供的方式通过username调用到相关的用户信息，<code>UserDetailsService</code>的实现类可以通过配置的方式进行注入</li>
+<li><strong>PasswordEncoder</strong> 通过此类进行用户密码的对比</li>
 </ul>
-<h3 id="依赖关系图"><a href="#依赖关系图" class="headerlink" title="依赖关系图"></a>依赖关系图</h3>
+<h4 id="RememberMeServices认证流程"><a href="#RememberMeServices认证流程" class="headerlink" title="RememberMeServices认证流程"></a><strong>RememberMeServices</strong>认证流程</h4><ul>
+<li><strong>RememberMeAuthenticationFilter</strong>rememberMe的认证filter，调用<code>RememberMeServices</code>进行自动登陆</li>
+<li><strong>RememberMeServices</strong>的实现默认有两个<code>TokenBasedRememberMeServices</code>、<code>PersistentTokenBasedRememberMeServices</code>，此类实现了用户的自动登陆和登陆或失败时的跳转，自动登陆时进行验证效期，下面以<code>PersistentTokenBasedRememberMeServices</code>进行自动登陆的讲解</li>
+<li><strong>UserDetailsService</strong>可以通过系统配置自己进行实现，</li>
+</ul>
+<h3 id="Authorization流程"><a href="#Authorization流程" class="headerlink" title="Authorization流程"></a>Authorization流程</h3><h4 id="FilterSecurityInterceptor授权逻辑"><a href="#FilterSecurityInterceptor授权逻辑" class="headerlink" title="FilterSecurityInterceptor授权逻辑"></a><strong>FilterSecurityInterceptor</strong>授权逻辑</h4><ul>
+<li><strong>FilterSecurityInterceptor</strong>进行授权的拦截器，此类进行调用<code>accessDecisionManager</code>进行授权</li>
+<li><strong>accessDecisionManager</strong>通过<code>AccessDecisionVoter</code>的进行选举，实现方式：<blockquote>
+<p><code>AffirmativeBased</code>有选举ACCESS_GRANTED则授权成功<br><code>ConsensusBased</code>有选举ACCESS_DENIED的则授权失败<br><code>UnanimousBased</code>选举少数服从多数</p>
+</blockquote>
+</li>
+<li><strong>AccessDecisionVoter</strong>进行选举，实现方案有<code>RoleVoter</code>、<code>WebExpressionVoter</code>、<code>AuthenticatedVoter</code>等<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ACCESS_GRANTED = <span class="number">1</span>; <span class="comment">// 授权</span></span><br><span class="line"><span class="keyword">int</span> ACCESS_ABSTAIN = <span class="number">0</span>; <span class="comment">// 弃权</span></span><br><span class="line"><span class="keyword">int</span> ACCESS_DENIED = -<span class="number">1</span>; <span class="comment">// 拒绝授权</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Spring security在授权完成之后调用原链进行接口的访问</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="Spring-security的相关bean是怎么被加载的"><a href="#Spring-security的相关bean是怎么被加载的" class="headerlink" title="Spring security的相关bean是怎么被加载的"></a>Spring security的相关bean是怎么被加载的</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123; EnableWebSecurity.class, AuthenticationEntryPoint.class &#125;) <span class="comment">// 表示加载不到这个类时不生成类中的bean</span></span><br></pre></td></tr></table></figure>
+<h4 id="Spring-security核心组件"><a href="#Spring-security核心组件" class="headerlink" title="Spring security核心组件"></a>Spring security核心组件</h4><ul>
+<li><strong>Authentication</strong> Represents the token for an authentication request or for an authenticated principal once the request has been processed by the <code>AuthenticationManager#authenticate(Authentication)</code> method.</li>
+<li><strong>SecurityContext</strong> Interface defining the minimum security information associated with the current thread of execution.</li>
+<li><strong>SecurityContextHolder</strong> Associates a given <code>SecurityContext</code> with the current execution thread.</li>
+<li><strong>UserDetails</strong> Provides core user information.</li>
+<li><strong>UserDetailsService</strong> Core interface which loads user-specific data.</li>
+<li><strong>GrantedAuthority</strong> Represents an authority granted to an <code>Authentication</code> object.</li>
+</ul>
+<h4 id="SecurityContextHolder进行认证"><a href="#SecurityContextHolder进行认证" class="headerlink" title="SecurityContextHolder进行认证"></a>SecurityContextHolder进行认证</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UsernamePasswordAuthenticationToken token = <span class="keyword">new</span> UsernamePasswordAuthenticationToken(username, password);</span><br><span class="line">Authentication authenticate = authenticationManager.authenticate(token);</span><br><span class="line">SecurityContextHolder.getContext().setAuthentication(authenticate);</span><br></pre></td></tr></table></figure>
           
         
       
@@ -628,7 +802,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
