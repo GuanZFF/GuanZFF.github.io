@@ -313,6 +313,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/红黑树/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GuanZF">
+      <meta itemprop="description" content="Overlook the distance, see clearly.">
+      <meta itemprop="image" content="/images/default-avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Z.F Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/08/红黑树/" class="post-title-link" itemprop="http://yoursite.com/index.html">红黑树</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-08 21:40:10 / Modified: 22:56:22" itemprop="dateCreated datePublished" datetime="2019-01-08T21:40:10+08:00">2019-01-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><p>&emsp;&emsp;每个节点最多有两个字节点（左子树、右子树）的树称之为二叉树，当每个节点的子节点都是满的时被称为完全二叉树。<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/tree/TREE1.jpg" alt="二叉树"></p>
+<h4 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h4><h5 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h5><p>&emsp;&emsp;遍历时先遍历当前节点，在遍历左子树，最后遍历右子树，<code>（根节点 -&gt; 左子树 -&gt; 右子树）</code>根据上图所示通过先序遍历得到结果：<strong>A B D C E F</strong></p>
+<h5 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h5><p>&emsp;&emsp;遍历时先遍历左子树，在遍历当前节点，最后遍历右子树，<code>（左子树 -&gt; 根节点 -&gt; 右子树）</code>根据上图所示通过先序遍历得到结果：<strong>D B A E C F</strong></p>
+<h5 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h5><p>&emsp;&emsp;遍历时先遍历左子树，在遍历右子树，最后遍历当前节点，<code>（左子树 -&gt; 右子树 -&gt; 根节点）</code>根据上图所示通过先序遍历得到结果：<strong>D B E F C A</strong></p>
+<h4 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h4><p>&emsp;&emsp;二叉树查找的特点是根节点大于左节点小于右节点，还要满足任何节点的两个子树的高度最大差为1，如下图所示就是一个二叉查找树，二叉查找树通过中序遍历就可以得到一个有序的序列：30、40、45、48、55、90<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/tree/TREE2.jpg" alt="二叉查找树"></p>
+<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h3><p>&emsp;&emsp;红黑树是一种特定类型的二叉树，在计算机科学中用于组织数据比如数字结构，所有的数据都存储于节点中，没有子节点的节点称之为叶子节点；红黑树也是一种二叉查找树，所有遵循的特点是父节点的数值大于左子树节点小于右子树节点。红黑树的性质</p>
+<ul>
+<li><strong>节点是红色或者黑色</strong></li>
+<li><strong>根结点必须是黑色</strong></li>
+<li><strong>每个叶子节点（NIL节点、空节点）是黑色的</strong></li>
+<li><strong>每个红色节点的两个子叶节点必须是黑色，每个叶子节点到根节点的路径上不能出现两个连续的红色节点</strong></li>
+<li><strong>从任意节点到其每个叶子节点的所有路径都包含相同的黑色节点数</strong></li>
+</ul>
+<p>插入节点X时的进行树的平衡<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x：当前插入的节点，xp：x的父节点，xpp：xp的父节点，xppl：xpp的左子树，xppr：xpp的右子树</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (xp == (xppl = xpp.left)) &#123;</span><br><span class="line">    <span class="keyword">if</span> ((xppr = xpp.right) != <span class="keyword">null</span> &amp;&amp; xppr.red) &#123;</span><br><span class="line">        xppr.red = <span class="keyword">false</span>;</span><br><span class="line">        xp.red = <span class="keyword">false</span>;</span><br><span class="line">        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">        x = xpp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == xp.right) &#123;</span><br><span class="line">            root = rotateLeft(root, x = xp); <span class="comment">// 进行左旋</span></span><br><span class="line">            xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">            xp.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                root = rotateRight(root, xpp); <span class="comment">// 进行右旋</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (xppl != <span class="keyword">null</span> &amp;&amp; xppl.red) &#123;</span><br><span class="line">        xppl.red = <span class="keyword">false</span>;</span><br><span class="line">        xp.red = <span class="keyword">false</span>;</span><br><span class="line">        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">        x = xpp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == xp.left) &#123;</span><br><span class="line">            root = rotateRight(root, x = xp); <span class="comment">// 进行右旋</span></span><br><span class="line">            xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">            xp.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                root = rotateLeft(root, xpp); <span class="comment">// 进行左旋</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="AVL树（自平衡二叉树）"><a href="#AVL树（自平衡二叉树）" class="headerlink" title="AVL树（自平衡二叉树）"></a>AVL树（自平衡二叉树）</h4><p>&emsp;&emsp;AVL树是最先发明的自平衡二叉查找树。在AVL树中任何节点的两个子树的高度最大差别为1，所以它也被称为高度平衡树，增加和删除可能需要通过一次或多次树旋转来重新平衡这个树</p>
+<h4 id="红黑树和AVL树的对比"><a href="#红黑树和AVL树的对比" class="headerlink" title="红黑树和AVL树的对比"></a>红黑树和AVL树的对比</h4><p>&emsp;&emsp;红黑树的性能略差于AVL树，因为红黑树的子树高度差比AVL树高1，所以搜索时会多进行一次，但是红黑树的插入和删除的效率要高于AVL树，因为红黑树最多只需要三次旋转即可平衡（O(1)），而AVL树最多需要logN次的旋转（O(logN)）</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/Java虚拟机/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1009,7 +1166,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1032,7 +1189,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
