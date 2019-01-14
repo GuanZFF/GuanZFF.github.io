@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="CPU缓存&amp;emsp;&amp;emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构 缓存一致性&amp;emsp;&amp;emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/Java多线程/index.html">
+<meta property="og:site_name" content="Z.F Blog">
+<meta property="og:description" content="CPU缓存&amp;emsp;&amp;emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构 缓存一致性&amp;emsp;&amp;emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread1.jpg">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread2.jpg">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread3.jpg">
+<meta property="og:updated_time" content="2019-01-14T12:14:12.322Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java多线程">
+<meta name="twitter:description" content="CPU缓存&amp;emsp;&amp;emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构 缓存一致性&amp;emsp;&amp;emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问">
+<meta name="twitter:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/10/Java多线程/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java多线程 | Z.F Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Z.F Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Overlook the distance</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/GuanZFF" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/Java多线程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GuanZF">
+      <meta itemprop="description" content="Overlook the distance, see clearly.">
+      <meta itemprop="image" content="/images/default-avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Z.F Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java多线程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-10 23:07:12" itemprop="dateCreated datePublished" datetime="2019-01-10T23:07:12+08:00">2019-01-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-14 20:14:12" itemprop="dateModified" datetime="2019-01-14T20:14:12+08:00">2019-01-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="CPU缓存"><a href="#CPU缓存" class="headerlink" title="CPU缓存"></a>CPU缓存</h3><p>&emsp;&emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread1.jpg" alt="cpu缓存模型"></p>
+<h4 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h4><p>&emsp;&emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问题</p>
+<h5 id="总线锁-bus-locking"><a href="#总线锁-bus-locking" class="headerlink" title="总线锁(bus locking)"></a>总线锁(bus locking)</h5><p>&emsp;&emsp;一种CPU缓存一致性问题的解决方案。具体做法是，当CPU进行对缓存中的数据修改时，向总线中发出一个LOCK信号，其他CPU就不再操作缓存中的数据，当LOCK释放后直接从主存中读取数据，但是此方法会使得CPU性能下降</p>
+<h5 id="MESI-modify、exclusive、share、invalid"><a href="#MESI-modify、exclusive、share、invalid" class="headerlink" title="MESI(modify、exclusive、share、invalid)"></a>MESI(modify、exclusive、share、invalid)</h5><ul>
+<li>M: Modify，修改缓存，当前CPU的缓存已经被修改了，即与内存中数据已经不一致了</li>
+<li>E: Exclusive，独占缓存，当前CPU的缓存和内存中数据保持一致，而且其他处理器并没有可使用的缓存数据</li>
+<li>S: Share，共享缓存，和内存保持一致的一份拷贝，多组缓存可以同时拥有针对同一内存地址的共享缓存段</li>
+<li>I: Invalid，失效缓存，这个说明CPU中的缓存已经不能使用了</li>
+</ul>
+<p>&emsp;&emsp;MESI是保持一致性的协议。它的方法是在CPU缓存中保存一个标记位，这个标记位有四种状态，CPU的读取遵循下面几点:</p>
+<ul>
+<li>如果缓存状态是I，那么就从内存中读取，否则就从缓存中直接读取</li>
+<li>如果缓存处于M或E的CPU读取到其他CPU有读操作，就把自己的缓存写入到内存中，并将自己的状态设置为S</li>
+<li>只有缓存状态是M或E的时候，CPU才可以修改缓存中的数据，修改后，缓存状态变为M</li>
+</ul>
+<h3 id="synchronized原理"><a href="#synchronized原理" class="headerlink" title="synchronized原理"></a>synchronized原理</h3><p>&emsp;&emsp;这是我们常见的一种锁机制，属于悲观锁，由于有线程使用共享资源时，就认为会发生冲突，进行加锁，所以性能较差</p>
+<h4 id="当synchronized修饰函数时"><a href="#当synchronized修饰函数时" class="headerlink" title="当synchronized修饰函数时"></a>当synchronized修饰函数时</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 临界资源</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修饰对象，此对象有个线程修饰时，其当线程不能使用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add1</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread2.jpg" alt="synchronized修饰函数"><br>&emsp;&emsp;当synchronized修饰对象时，同步代码块会在代码中插入 monitorenter 和 monitorexist 指令</p>
+<h4 id="当synchronized修饰对象时"><a href="#当synchronized修饰对象时" class="headerlink" title="当synchronized修饰对象时"></a>当synchronized修饰对象时</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 临界资源</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修饰方法，此方法当前只能有一个线程调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread3.jpg" alt="synchronized修饰对象"><br>&emsp;&emsp;当synchronized修饰对象时，使用 ACC_SYNCHRONIZED 标记符隐示的实现，原理是通过方法调用指令检查该方法在常量池中是否包含 ACC_SYNCHRONIZED 标记符</p>
+<h3 id="volatile原理"><a href="#volatile原理" class="headerlink" title="volatile原理"></a>volatile原理</h3><p>&emsp;&emsp;volatile修饰属性，被此字段修饰的属性表示为内存可见（不保证原子性），不会发生指令重排，当一个线程修改时，其他线程去内存读取数据，相比于synchronized是轻量级的</p>
+<h3 id="CAS原理"><a href="#CAS原理" class="headerlink" title="CAS原理"></a>CAS原理</h3><p>&emsp;&emsp;全名compare and swap，常见的锁机制，属于乐观锁的一种，实现方式是基于硬件平台的汇编指令，在intel的CPU中，使用的是cmpxchg指令，就是说CAS是靠硬件实现的，从而在硬件层面提升效率，和内存中的老数据进行比较，如果相同则写入新的数据，老的数据不同时进行轮询，直到相同时进行写入<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用native方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4, <span class="keyword">int</span> var5)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;上述方法为表native示调用C/C++代码，hotspot源码如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C/C++源码</span></span><br><span class="line">UNSAFE_ENTRY(jboolean, Unsafe_CompareAndSetInt(JNIEnv *env, jobject unsafe, jobject obj, jlong offset, jint e, jint x)) &#123;</span><br><span class="line">    oop p = JNIHandles::resolve(obj);</span><br><span class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">volatile</span> jint* addr = (<span class="keyword">volatile</span> jint*)index_oop_from_field_offset_long(p, offset);</span><br><span class="line">        <span class="keyword">return</span> RawAccess&lt;&gt;::atomic_cmpxchg(x, addr, e) == e;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        assert_field_offset_sane(p, offset);</span><br><span class="line">        <span class="keyword">return</span> HeapAccess&lt;&gt;::atomic_cmpxchg_at(x, p, (<span class="keyword">ptrdiff_t</span>)offset, e) == e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; UNSAFE_END</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;有上述代码可知最终调用的方法atomic_cmpxchg，而此方法会根据不同的操作系统调用不同的接口</p>
+<h4 id="CAS存在的问题"><a href="#CAS存在的问题" class="headerlink" title="CAS存在的问题"></a>CAS存在的问题</h4><ul>
+<li>ABA问题：当线程1获取数据资源时是A，而后来线程2把共享资源修改成了B然后有修改成了A，所以这时线程1对比时数据是相同的，没有发现数据被更改过，使用version解决此问题</li>
+<li>轮询期间资源浪费问题</li>
+</ul>
+<h3 id="AQS（AbstractQueuedSynchronizer）"><a href="#AQS（AbstractQueuedSynchronizer）" class="headerlink" title="AQS（AbstractQueuedSynchronizer）"></a>AQS（AbstractQueuedSynchronizer）</h3><p>&emsp;&emsp;基于CAS和双向链表（队列）实现，是轻量级的锁结构，代码中维护了state、head、tail和一个当前正则执行的线程；继承时一般需要重写tryAcquire和tryRelease方法，当调用acquire时需要先进行判断state是否为0，如果不为了0则进行判断是否为当前线程执行，如果不是则添加到等待队列，线程的阻塞通过LockSupport进行支持</p>
+<h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p>&emsp;&emsp;此类基于AQS实现，其中有个内部类Sync继承了AQS，对AQS中的tryAcquire和tryRelease进行了实现，其中方法lock和unlock也只是分别调用了AQS中的acquire和release方法，同时此类基于Sync实现了FairSync和NonfairSync，区别就在于lock的过程，其中NonfairSync的方式是直接调用了compareAndSetState(0, 1)如果失败了在进行acquire</p>
+<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>&emsp;&emsp;此类基于AQS实现，用于线程阻塞，只有当AQS的state为0时结束当前线程的阻塞<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1执行结束count的数量减一</span></span><br><span class="line"><span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">    System.out.println(<span class="string">"THREAD1"</span>);</span><br><span class="line">    countDownLatch.countDown();</span><br><span class="line">&#125;, <span class="string">"THREAD1"</span>).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2执行结束count的数量减一</span></span><br><span class="line"><span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">    System.out.println(<span class="string">"THREAD1"</span>);</span><br><span class="line">    countDownLatch.countDown();</span><br><span class="line">&#125;, <span class="string">"THREAD1"</span>).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当count的state为0时结束主线程阻塞</span></span><br><span class="line">countDownLatch.await();</span><br><span class="line">System.out.println(<span class="string">"main thread finish"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h3><p>&emsp;&emsp;此类的实现基于ReentrantLock，其中put和take两个方法是线程阻塞的，当线程put数据是如果队列没有空间则线程等待，take同理取数据是队列中没有数据进行线程等待</p>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>&emsp;&emsp;此类基于Array + link + RB Tree模型使用分段锁粒度实现，提高了并发性能，其实现是在树或链表的根节点中添加了synchronized，不予许多个线程同时操作同一个树或者同一个链表</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/08/红黑树/" rel="next" title="红黑树">
+                <i class="fa fa-chevron-left"></i> 红黑树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/default-avatar.jpeg" alt="GuanZF">
+            
+              <p class="site-author-name" itemprop="name">GuanZF</p>
+              <p class="site-description motion-element" itemprop="description">Overlook the distance, see clearly.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU缓存"><span class="nav-number">1.</span> <span class="nav-text">CPU缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存一致性"><span class="nav-number">1.1.</span> <span class="nav-text">缓存一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#总线锁-bus-locking"><span class="nav-number">1.1.1.</span> <span class="nav-text">总线锁(bus locking)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MESI-modify、exclusive、share、invalid"><span class="nav-number">1.1.2.</span> <span class="nav-text">MESI(modify、exclusive、share、invalid)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized原理"><span class="nav-number">2.</span> <span class="nav-text">synchronized原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰函数时"><span class="nav-number">2.1.</span> <span class="nav-text">当synchronized修饰函数时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰对象时"><span class="nav-number">2.2.</span> <span class="nav-text">当synchronized修饰对象时</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile原理"><span class="nav-number">3.</span> <span class="nav-text">volatile原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS原理"><span class="nav-number">4.</span> <span class="nav-text">CAS原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS存在的问题"><span class="nav-number">4.1.</span> <span class="nav-text">CAS存在的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS（AbstractQueuedSynchronizer）"><span class="nav-number">5.</span> <span class="nav-text">AQS（AbstractQueuedSynchronizer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">7.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">8.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">9.</span> <span class="nav-text">ConcurrentHashMap</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuanZF</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

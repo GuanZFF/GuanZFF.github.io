@@ -313,6 +313,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/Java多线程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GuanZF">
+      <meta itemprop="description" content="Overlook the distance, see clearly.">
+      <meta itemprop="image" content="/images/default-avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Z.F Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/10/Java多线程/" class="post-title-link" itemprop="http://yoursite.com/index.html">Java多线程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-10 23:07:12" itemprop="dateCreated datePublished" datetime="2019-01-10T23:07:12+08:00">2019-01-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-14 20:14:12" itemprop="dateModified" datetime="2019-01-14T20:14:12+08:00">2019-01-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          CPU缓存&emsp;&emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构
+缓存一致性&emsp;&emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问题
+总线锁(bus locking)&emsp;&emsp;一种CPU缓存一致性问题的解决方案。具体做法是，当CPU进行对缓存中的数据修改时，向总线中发出一个LOCK信号，其他CPU就不再操作缓存中的
+          ...
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/10/Java多线程/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/红黑树/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -398,24 +562,20 @@
       
         
           
-            <h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><p>&emsp;&emsp;每个节点最多有两个字节点（左子树、右子树）的树称之为二叉树，当每个节点的子节点都是满的时被称为完全二叉树。<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/tree/TREE1.jpg" alt="二叉树"></p>
-<h4 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h4><h5 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h5><p>&emsp;&emsp;遍历时先遍历当前节点，在遍历左子树，最后遍历右子树，<code>（根节点 -&gt; 左子树 -&gt; 右子树）</code>根据上图所示通过先序遍历得到结果：<strong>A B D C E F</strong></p>
-<h5 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h5><p>&emsp;&emsp;遍历时先遍历左子树，在遍历当前节点，最后遍历右子树，<code>（左子树 -&gt; 根节点 -&gt; 右子树）</code>根据上图所示通过先序遍历得到结果：<strong>D B A E C F</strong></p>
-<h5 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h5><p>&emsp;&emsp;遍历时先遍历左子树，在遍历右子树，最后遍历当前节点，<code>（左子树 -&gt; 右子树 -&gt; 根节点）</code>根据上图所示通过先序遍历得到结果：<strong>D B E F C A</strong></p>
-<h4 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h4><p>&emsp;&emsp;二叉树查找的特点是根节点大于左节点小于右节点，还要满足任何节点的两个子树的高度最大差为1，如下图所示就是一个二叉查找树，二叉查找树通过中序遍历就可以得到一个有序的序列：30、40、45、48、55、90<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/tree/TREE2.jpg" alt="二叉查找树"></p>
-<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h3><p>&emsp;&emsp;红黑树是一种特定类型的二叉树，在计算机科学中用于组织数据比如数字结构，所有的数据都存储于节点中，没有子节点的节点称之为叶子节点；红黑树也是一种二叉查找树，所有遵循的特点是父节点的数值大于左子树节点小于右子树节点。红黑树的性质</p>
-<ul>
-<li><strong>节点是红色或者黑色</strong></li>
-<li><strong>根结点必须是黑色</strong></li>
-<li><strong>每个叶子节点（NIL节点、空节点）是黑色的</strong></li>
-<li><strong>每个红色节点的两个子叶节点必须是黑色，每个叶子节点到根节点的路径上不能出现两个连续的红色节点</strong></li>
-<li><strong>从任意节点到其每个叶子节点的所有路径都包含相同的黑色节点数</strong></li>
-</ul>
-<p>插入节点X时的进行树的平衡<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x：当前插入的节点，xp：x的父节点，xpp：xp的父节点，xppl：xpp的左子树，xppr：xpp的右子树</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (xp == (xppl = xpp.left)) &#123;</span><br><span class="line">    <span class="keyword">if</span> ((xppr = xpp.right) != <span class="keyword">null</span> &amp;&amp; xppr.red) &#123;</span><br><span class="line">        xppr.red = <span class="keyword">false</span>;</span><br><span class="line">        xp.red = <span class="keyword">false</span>;</span><br><span class="line">        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">        x = xpp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == xp.right) &#123;</span><br><span class="line">            root = rotateLeft(root, x = xp); <span class="comment">// 进行左旋</span></span><br><span class="line">            xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">            xp.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                root = rotateRight(root, xpp); <span class="comment">// 进行右旋</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (xppl != <span class="keyword">null</span> &amp;&amp; xppl.red) &#123;</span><br><span class="line">        xppl.red = <span class="keyword">false</span>;</span><br><span class="line">        xp.red = <span class="keyword">false</span>;</span><br><span class="line">        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">        x = xpp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == xp.left) &#123;</span><br><span class="line">            root = rotateRight(root, x = xp); <span class="comment">// 进行右旋</span></span><br><span class="line">            xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">            xp.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                root = rotateLeft(root, xpp); <span class="comment">// 进行左旋</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="AVL树（自平衡二叉树）"><a href="#AVL树（自平衡二叉树）" class="headerlink" title="AVL树（自平衡二叉树）"></a>AVL树（自平衡二叉树）</h4><p>&emsp;&emsp;AVL树是最先发明的自平衡二叉查找树。在AVL树中任何节点的两个子树的高度最大差别为1，所以它也被称为高度平衡树，增加和删除可能需要通过一次或多次树旋转来重新平衡这个树</p>
-<h4 id="红黑树和AVL树的对比"><a href="#红黑树和AVL树的对比" class="headerlink" title="红黑树和AVL树的对比"></a>红黑树和AVL树的对比</h4><p>&emsp;&emsp;红黑树的性能略差于AVL树，因为红黑树的子树高度差比AVL树高1，所以搜索时会多进行一次，但是红黑树的插入和删除的效率要高于AVL树，因为红黑树最多只需要三次旋转即可平衡（O(1)），而AVL树最多需要logN次的旋转（O(logN)）</p>
-
+          二叉树&emsp;&emsp;每个节点最多有两个字节点（左子树、右子树）的树称之为二叉树，当每个节点的子节点都是满的时被称为完全二叉树。
+二叉树遍历先序遍历&emsp;&emsp;遍历时先遍历当前节点，在遍历左子树，最后遍历右子树，（根节点 -&gt; 左子树 -&gt; 右子树）根据上图所示通过先序遍历得到结果：A B D C E F
+中序遍历&emsp;&emsp;遍历时先遍历左子树，在遍历当前节点，最后遍历右子树，（左子树 -&gt; 根节点 -&gt; 右子树）根据上图所示通过先序遍历得到结果：D B A E C F
+后序遍历&emsp;&emsp;遍历时先遍历左子树，在遍历右子树，最
+          ...
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/08/红黑树/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -567,336 +727,19 @@
       
         
           
-            <h3 id="一、JVM内部运行图"><a href="#一、JVM内部运行图" class="headerlink" title="一、JVM内部运行图"></a>一、JVM内部运行图</h3><p>&emsp;&emsp;从.java文件通过编译器生成.class(编译可以通过命令javac文件实现)，编程后的.class文件通过类加载器加载到内存中，当内存不足时触发JVM的GC处理<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM5.jpg" alt="JVM运行模型"></p>
-<h3 id="二、类加载器"><a href="#二、类加载器" class="headerlink" title="二、类加载器"></a>二、类加载器</h3><p>&emsp;&emsp;用于加载通过编译器生成的.class文件，启动类加载器Bootstrap classloader、扩展类加载器Extension classloader、应用类加载器Application classloader<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM4.jpg" alt="类加载器"></p>
-<h4 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h4><p>&emsp;&emsp;双亲委派指的是当需要加载类时，子类加载器会委派父类加载器进行加载，使用双亲委派主要是为了防止重复的加载类，可以通过重写loadClass方法实现打破双亲委派</p>
-<h3 id="三、JVM内存模型"><a href="#三、JVM内存模型" class="headerlink" title="三、JVM内存模型"></a>三、JVM内存模型</h3><p>&emsp;&emsp;Java内存简单划分可以分为heap和non-heap，具体细节上可分为线程私有：栈、程序计数器，线程共有：堆、method area、native area，分别介绍：</p>
-<h4 id="栈（Stack）"><a href="#栈（Stack）" class="headerlink" title="栈（Stack）"></a>栈（Stack）</h4><p>&emsp;&emsp;栈时Java线程私有的，主要有栈帧组成，相当于当你调用一个方法时，就会创建一个栈帧，其中调用的一些参数会由栈帧中的局部变量表存储，函数中的程序执行是放在栈帧的操作数栈中执行，其中操作数栈中存储的是一些基础变量和reference，当栈内存满的时候会抛出OutOfMemoryError，栈帧满的时候抛出StackOverflowError栈帧有一下组成</p>
-<ul>
-<li>局部变量表</li>
-<li>操作数栈</li>
-<li>动态连接信息</li>
-<li>方法返回值</li>
-<li>附加信息</li>
-</ul>
-<p>栈和栈帧的引用图<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM6.jpg" alt="栈和栈帧"></p>
-<h4 id="程序计算器（Program-Count）"><a href="#程序计算器（Program-Count）" class="headerlink" title="程序计算器（Program Count）"></a>程序计算器（Program Count）</h4><p>&emsp;&emsp;当前线程所执行的字节码的行号指示器，也是线程私有的，此区域没有规定任何OutOfMemoryError情况的区域。当程序执行native代码时，这个计数器的值则为空</p>
-<h4 id="堆（Heap）"><a href="#堆（Heap）" class="headerlink" title="堆（Heap）"></a>堆（Heap）</h4><p>&emsp;&emsp;线程公有，Java分配的最大的一个空间，用于存储对象，栈帧中的引用指向的对象就存储于堆中，也是GC处理的主要空间，GC的分代回收示意图<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM7.jpg" alt="堆内存划分和GC回收"></p>
-<h4 id="方法域（Method-Area）"><a href="#方法域（Method-Area）" class="headerlink" title="方法域（Method Area）"></a>方法域（Method Area）</h4><p>&emsp;&emsp;线程公有，用于存储一些常量数据，class加载的文件，static创建的对象，内存分配满的时候会抛出OutOfMemoryError</p>
-<h4 id="Native-Area"><a href="#Native-Area" class="headerlink" title="Native Area"></a>Native Area</h4><p>&emsp;&emsp;C++创建对象分配数据用于存储的区域，Native域的栈会抛出StackOverFlowError和OutOfMemoryError异常。</p>
-<h3 id="四、GC（Garbage-Collection）"><a href="#四、GC（Garbage-Collection）" class="headerlink" title="四、GC（Garbage Collection）"></a>四、GC（Garbage Collection）</h3><p>&emsp;&emsp;主要用于收集堆内存的空间，为了不影响用户的线程执行，一般GC只在堆内存空间满时进行对象回收</p>
-<h4 id="判断对象是否存活算法"><a href="#判断对象是否存活算法" class="headerlink" title="判断对象是否存活算法"></a>判断对象是否存活算法</h4><ul>
-<li>引用计数算法：当创建一个对象后，出现引用时计数+1，当引用不在使用引用计数-1，当引用数为0时，标志此对象可以回收，此算法解决不了循环引用的问题</li>
-<li>可达性分析算法：表示对象引用的最上层是GC Root（静态对象、栈中的引用等），如果没找找到这样的对象引用则可以进行回收</li>
-</ul>
-<h4 id="GC收集算法"><a href="#GC收集算法" class="headerlink" title="GC收集算法"></a>GC收集算法</h4><h5 id="标记-清除"><a href="#标记-清除" class="headerlink" title="标记-清除"></a>标记-清除</h5><p>&emsp;&emsp;指的是直接堆标记的对象进行清除</p>
-<h5 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h5><p>&emsp;&emsp;指的是把标记的没有消亡对象复制到另外一片可以使用的空间中</p>
-<h5 id="标记-整理"><a href="#标记-整理" class="headerlink" title="标记-整理"></a>标记-整理</h5><p>&emsp;&emsp;指的是把标记的对象清除掉，然后把还可以使用的对象重新整理，放在此空间中</p>
-<h5 id="分代回收算法"><a href="#分代回收算法" class="headerlink" title="分代回收算法"></a>分代回收算法</h5><p>&emsp;&emsp;分代回收划分的区域分别是young space、old space、metaspace等，当young space空间不足时就可以触发GC，使得内存空间转化到old space中。其中young space空间的划分为eden和survive，两块空间的默认比例是8:2<br>&emsp;&emsp;设置运行参数-Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails，debug一下代码时通过jstat -gc <process id=""> millisecond count，既可观察eden space、survive space、old space空间的变化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _1M = <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">byte</span>[] byte1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1M];</span><br><span class="line">        <span class="keyword">byte</span>[] byte2 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1M];</span><br><span class="line">        <span class="keyword">byte</span>[] byte3 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1M];</span><br><span class="line">        <span class="keyword">byte</span>[] byte4 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1M];</span><br><span class="line">        <span class="keyword">byte</span>[] byte5 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1M];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></process></p>
-<h4 id="GC收集器"><a href="#GC收集器" class="headerlink" title="GC收集器"></a>GC收集器</h4><h5 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h5><p>&emsp;&emsp;串行收集器，当内存空间满的时候GC进行收集，GC的过程占用单独的线程，而且在GC线程执行的过程中其他的用户线程都停止，当GC线程工作完成后再次启动用户线程，此收集器缺点是会使用户线程出现短暂的暂停，所以不能接收自己线程暂停的系统不能使用此收集器，好处是效率高实现简单<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM8.jpg" alt="串行收集器"></p>
-<h5 id="CMS收集器"><a href="#CMS收集器" class="headerlink" title="CMS收集器"></a>CMS收集器</h5><p>&emsp;&emsp;并行收集器，收集时会把耗时较长的清理过程和用户线程并行执行，因此不阻碍用户线程的执行，但是由于在清理过程是和用户线程并发执行的，所以会产生垃圾碎片，使得清理完成之后仍然会存在一定量的垃圾碎片，所以不强调用户线程不能停止的建议使用serial收集器</p>
-<ul>
-<li>初始标记(CMS-initial-mark)</li>
-<li>并发标记(CMS-concurrent-mark) </li>
-<li>重新标记(CMS-remark)</li>
-<li>并发清除(CMS-concurrent-sweep)</li>
-</ul>
-<p>并发清理过程图<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM11.jpg" alt="并发收集器"></p>
-<h5 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h5><p>&emsp;&emsp;G1收集算法一个比较的特点就是并不按照young space、old space等空间划分进行回收，而是将堆空间划分多个大小相等的独立区域（Region），G1收集器可以预测停顿时间是因为空间的划分可以有效的避免了整个堆空间的扫描</p>
-<ul>
-<li>初始标记(initial-mark)</li>
-<li>并发标记(concurrent-marking) </li>
-<li>最终标记(final-marking)</li>
-<li>筛选回收(live-data-counting-and-evacuation)</li>
-</ul>
-<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM10.jpg" alt="G1收集器"></p>
-<h3 id="五、Java性能监控和处理工具"><a href="#五、Java性能监控和处理工具" class="headerlink" title="五、Java性能监控和处理工具"></a>五、Java性能监控和处理工具</h3><ul>
-<li>【jps】查看Java进程命令，并显示执行的主类</li>
-<li>【jstat】用于监视虚拟机各种运行状态信息的命令，如：jstat -gc <pid>即可查看堆内存的使用情况</pid></li>
-<li>【jinfo】实时的查看和调整虚拟机的各项参数</li>
-<li>【jmap】用于生成堆转储快照</li>
-<li>【jstack】用于生成虚拟机当前时刻的线程快照</li>
-<li>【jconsole】打开Java提供的内部监测图形界面工具</li>
-</ul>
-<h3 id="六、字节码"><a href="#六、字节码" class="headerlink" title="六、字节码"></a>六、字节码</h3><p>&emsp;&emsp;Java虚拟机的指令有一个字节长度的、代表着某种特定操作含义的数字以及跟随其后的零至多个代表此操作的所需参数而构成。由于Java虚拟机采用的面向操作数栈而非寄存器机构，所以大多数只包括指令不包括操作数。</p>
-<h4 id="字节码分析"><a href="#字节码分析" class="headerlink" title="字节码分析"></a>字节码分析</h4><p>&emsp;&emsp;下面写了一个Test.java进行对字节码分析，代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">1</span>;</span><br><span class="line">        add(a, b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c = a + b + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;对此代码进行编译(javac Test.java)，然后通过javap进行反汇编(javap -c Test.class)，得到下图（只展示了main方法和add方法，构造方法没有截取）。<br><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/jvm/JVM12.jpg" alt="反编译结果"><br>&emsp;&emsp;分析add方法，当调用add方法是会在栈中创建栈帧，调用的参数或引用会放到局部变量表中，iload_0表示加载第一个局部变量到操作数栈的栈顶，iload_1再加载第二个局部变量，其后执行iadd操作得到的数据放入栈顶，iconst_1加载常量数据10到栈顶，执行iadd得到数据放入栈顶，istore_2存储栈顶数据到局部变量表2中，iload_2加载局部变量表2中数据到栈顶，ireturn返回栈顶数据。</p>
-<h4 id="Java虚拟机指令集所支持的数据类型"><a href="#Java虚拟机指令集所支持的数据类型" class="headerlink" title="Java虚拟机指令集所支持的数据类型"></a>Java虚拟机指令集所支持的数据类型</h4><table>
-<thead>
-<tr>
-<th>opcode</th>
-<th>byte</th>
-<th>short</th>
-<th>int</th>
-<th>long</th>
-<th>float</th>
-<th>double</th>
-<th>char</th>
-<th>reference</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Tipush</td>
-<td>bipush</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tconst</td>
-<td></td>
-<td></td>
-<td>iconst</td>
-<td>lconst</td>
-<td>fconst</td>
-<td>dconst</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tload</td>
-<td></td>
-<td></td>
-<td>iload</td>
-<td>lload</td>
-<td>fload</td>
-<td>dload</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tstore</td>
-<td></td>
-<td></td>
-<td>istore</td>
-<td>lstore</td>
-<td>fstore</td>
-<td>dstore</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tinc</td>
-<td></td>
-<td></td>
-<td>iinc</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Taload</td>
-<td>baload</td>
-<td>saload</td>
-<td>iaload</td>
-<td>ilload</td>
-<td>faload</td>
-<td>daload</td>
-<td>caload</td>
-<td>aaload</td>
-</tr>
-<tr>
-<td>Tastore</td>
-<td>baload</td>
-<td>saload</td>
-<td>iaload</td>
-<td>ilload</td>
-<td>faload</td>
-<td>daload</td>
-<td>caload</td>
-<td>aaload</td>
-</tr>
-<tr>
-<td>Tadd</td>
-<td></td>
-<td></td>
-<td>iadd</td>
-<td>ladd</td>
-<td>fadd</td>
-<td>dadd</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tsub</td>
-<td></td>
-<td></td>
-<td>isub</td>
-<td>lsub</td>
-<td>fsub</td>
-<td>dsub</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tmul</td>
-<td></td>
-<td></td>
-<td>imul</td>
-<td>lmul</td>
-<td>fmul</td>
-<td>dmul</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tdiv</td>
-<td></td>
-<td></td>
-<td>idiv</td>
-<td>ldiv</td>
-<td>fdiv</td>
-<td>ddiv</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Trem</td>
-<td></td>
-<td></td>
-<td>irem</td>
-<td>lrem</td>
-<td>frem</td>
-<td>drem</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tneg</td>
-<td></td>
-<td></td>
-<td>ineg</td>
-<td>lneg</td>
-<td>fneg</td>
-<td>dneg</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tshl</td>
-<td></td>
-<td></td>
-<td>ishl</td>
-<td>lshl</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tshr</td>
-<td></td>
-<td></td>
-<td>ishr</td>
-<td>lshr</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tushr</td>
-<td></td>
-<td></td>
-<td>iushr</td>
-<td>lushr</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tand</td>
-<td></td>
-<td></td>
-<td>iand</td>
-<td>land</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tor</td>
-<td></td>
-<td></td>
-<td>ior</td>
-<td>lor</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Txor</td>
-<td></td>
-<td></td>
-<td>ixor</td>
-<td>lxor</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tcmp</td>
-<td></td>
-<td></td>
-<td></td>
-<td>lcmp</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Tcmpl</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>fcmpl</td>
-<td>dcmpl</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Treturn</td>
-<td></td>
-<td></td>
-<td>ireturn</td>
-<td>lreturn</td>
-<td>freturn</td>
-<td>dreturn</td>
-<td></td>
-<td>areturn</td>
-</tr>
-</tbody>
-</table>
-<h3 id="七、Java引用"><a href="#七、Java引用" class="headerlink" title="七、Java引用"></a>七、Java引用</h3><ul>
-<li>【强引用】GC触发时不会被回收的对象，通过new创建的对象</li>
-<li>【软引用】GC触发时根据内存情况进行对象回收，内存不足时进行对象回收，足够的时候不进行回收，SoftReference</li>
-<li>【弱引用】GC触发时一定会被回收的对象，WeakReference</li>
-<li>【虚引用】虚引用则跟没有引用与之关联一样，在任何时候都可能被垃圾回收器回收，PhantomReference</li>
-</ul>
-<h3 id="八、其他"><a href="#八、其他" class="headerlink" title="八、其他"></a>八、其他</h3><h4 id="指令重排"><a href="#指令重排" class="headerlink" title="指令重排"></a>指令重排</h4><p>&emsp;&emsp;在Java编译之后形成的指令顺序和jvm进行执行命令的顺序，为了确保执行后的结果一样，指令顺序一般不变。但是CPU和编译器为了提供执行效率，会发生一定的指令重排，这个重排过程在单线程中执行的结果不会存在二义性，但是在并发的情况下可能会出现异常结果，看如下代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> x = <span class="number">0</span>, y = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Thread one = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            a = <span class="number">1</span>;</span><br><span class="line">            x = b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    Thread other = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            b = <span class="number">1</span>;</span><br><span class="line">            y = a;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    one.start();other.start();</span><br><span class="line">    one.join();other.join();</span><br><span class="line">    System.out.println(<span class="string">"("</span> + x + <span class="string">","</span> + y + <span class="string">")"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;上述代码正常情况下得到的数据是(1,0),(0,1),(1,1)的结果，但是由于a = 1;和x = b;发生指令的重排 可能产生结果(0,0)，但是指令重排的过程中要遵循happen-before，则是A -&gt; B, B -&gt; C则A -&gt; C。<br>&emsp;&emsp;as-if-serial语义把单线程程序保护了起来，遵守as-if-serial语义的编译器，runtime 和处理器共同为编写单线程程序的程序员创建了一个幻觉：单线程程序是按程序的顺序来执行的。as-if-serial语义使单线程程序员无需担心重排序会干扰他们，也无需担心内存可见性问题，多线程情况下不遵循</p>
-<h4 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h4><p>&emsp;&emsp;内存屏障（Memory Barrier，或有时叫做内存栅栏，Memory Fence）是一种CPU指令，用于控制特定条件下的重排序和内存可见性问题。Java编译器也会根据内存屏障的规则禁止重排序，内存屏障可以被分为以下几种类型</p>
-<ul>
-<li><code>LoadLoad屏障</code>：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。</li>
-<li><code>StoreStore屏障</code>：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。</li>
-<li><code>LoadStore屏障</code>：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。</li>
-<li><code>StoreLoad屏障</code>：对于这样的语句Store1; StoreLoad; Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。它的开销是四种屏障中最大的。</li>
-</ul>
-
+          一、JVM内部运行图&emsp;&emsp;从.java文件通过编译器生成.class(编译可以通过命令javac文件实现)，编程后的.class文件通过类加载器加载到内存中，当内存不足时触发JVM的GC处理
+二、类加载器&emsp;&emsp;用于加载通过编译器生成的.class文件，启动类加载器Bootstrap classloader、扩展类加载器Extension classloader、应用类加载器Application classloader
+双亲委派&emsp;&emsp;双亲委派指的是当需要加载类时，子类加载器会委派父类加载器进行加载，使用双亲委派主要是为了防止重复的加载类，可
+          ...
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/05/Java虚拟机/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1048,40 +891,21 @@
       
         
           
-            <h3 id="Authentication流程"><a href="#Authentication流程" class="headerlink" title="Authentication流程"></a>Authentication流程</h3><h4 id="UsernamePasswordAuthenticationFilter认证流程"><a href="#UsernamePasswordAuthenticationFilter认证流程" class="headerlink" title="UsernamePasswordAuthenticationFilter认证流程"></a><strong>UsernamePasswordAuthenticationFilter</strong>认证流程</h4><ul>
-<li><strong>FilterChainProxy</strong> Spring Security注入filter的代理，通过<code>VirtualFilterChain</code>进行filter的链式调用</li>
-<li><strong>UsernamePasswordAuthenticationFilter</strong> 进行认证的filter(调用时传入的参数是<code>username、password</code>)，此filter会进行用户的认证，认证成功或时候是的逻辑执行</li>
-<li><strong>AuthenticationManager</strong> 认证用户信息（实现类<code>ProviderManager</code>）</li>
-<li><strong>AuthenticationProvider</strong>  认证用户信息，此接口的实现类DaoAuthenticationProvider、RememberMeAuthenticationProvider等，下面的调用方式以DaoAuthenticationProvider为例</li>
-<li><strong>DaoAuthenticationProvider</strong> 认证是通过调用<code>UserDetailsService</code>的实现类，此实现类会根据系统提供的方式通过username调用到相关的用户信息，<code>UserDetailsService</code>的实现类可以通过配置的方式进行注入</li>
-<li><strong>PasswordEncoder</strong> 通过此类进行用户密码的对比</li>
-</ul>
-<h4 id="RememberMeServices认证流程"><a href="#RememberMeServices认证流程" class="headerlink" title="RememberMeServices认证流程"></a><strong>RememberMeServices</strong>认证流程</h4><ul>
-<li><strong>RememberMeAuthenticationFilter</strong>rememberMe的认证filter，调用<code>RememberMeServices</code>进行自动登陆</li>
-<li><strong>RememberMeServices</strong>的实现默认有两个<code>TokenBasedRememberMeServices</code>、<code>PersistentTokenBasedRememberMeServices</code>，此类实现了用户的自动登陆和登陆或失败时的跳转，自动登陆时进行验证效期，下面以<code>PersistentTokenBasedRememberMeServices</code>进行自动登陆的讲解</li>
-<li><strong>UserDetailsService</strong>可以通过系统配置自己进行实现，</li>
-</ul>
-<h3 id="Authorization流程"><a href="#Authorization流程" class="headerlink" title="Authorization流程"></a>Authorization流程</h3><h4 id="FilterSecurityInterceptor授权逻辑"><a href="#FilterSecurityInterceptor授权逻辑" class="headerlink" title="FilterSecurityInterceptor授权逻辑"></a><strong>FilterSecurityInterceptor</strong>授权逻辑</h4><ul>
-<li><strong>FilterSecurityInterceptor</strong>进行授权的拦截器，此类进行调用<code>accessDecisionManager</code>进行授权</li>
-<li><strong>accessDecisionManager</strong>通过<code>AccessDecisionVoter</code>的进行选举，实现方式：<blockquote>
-<p><code>AffirmativeBased</code>有选举ACCESS_GRANTED则授权成功<br><code>ConsensusBased</code>有选举ACCESS_DENIED的则授权失败<br><code>UnanimousBased</code>选举少数服从多数</p>
-</blockquote>
-</li>
-<li><strong>AccessDecisionVoter</strong>进行选举，实现方案有<code>RoleVoter</code>、<code>WebExpressionVoter</code>、<code>AuthenticatedVoter</code>等<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ACCESS_GRANTED = <span class="number">1</span>; <span class="comment">// 授权</span></span><br><span class="line"><span class="keyword">int</span> ACCESS_ABSTAIN = <span class="number">0</span>; <span class="comment">// 弃权</span></span><br><span class="line"><span class="keyword">int</span> ACCESS_DENIED = -<span class="number">1</span>; <span class="comment">// 拒绝授权</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>Spring security在授权完成之后调用原链进行接口的访问</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="Spring-security的相关bean是怎么被加载的"><a href="#Spring-security的相关bean是怎么被加载的" class="headerlink" title="Spring security的相关bean是怎么被加载的"></a>Spring security的相关bean是怎么被加载的</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123; EnableWebSecurity.class, AuthenticationEntryPoint.class &#125;) <span class="comment">// 表示加载不到这个类时不生成类中的bean</span></span><br></pre></td></tr></table></figure>
-<h4 id="Spring-security核心组件"><a href="#Spring-security核心组件" class="headerlink" title="Spring security核心组件"></a>Spring security核心组件</h4><ul>
-<li><strong>Authentication</strong> Represents the token for an authentication request or for an authenticated principal once the request has been processed by the <code>AuthenticationManager#authenticate(Authentication)</code> method.</li>
-<li><strong>SecurityContext</strong> Interface defining the minimum security information associated with the current thread of execution.</li>
-<li><strong>SecurityContextHolder</strong> Associates a given <code>SecurityContext</code> with the current execution thread.</li>
-<li><strong>UserDetails</strong> Provides core user information.</li>
-<li><strong>UserDetailsService</strong> Core interface which loads user-specific data.</li>
-<li><strong>GrantedAuthority</strong> Represents an authority granted to an <code>Authentication</code> object.</li>
-</ul>
-<h4 id="SecurityContextHolder进行认证"><a href="#SecurityContextHolder进行认证" class="headerlink" title="SecurityContextHolder进行认证"></a>SecurityContextHolder进行认证</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UsernamePasswordAuthenticationToken token = <span class="keyword">new</span> UsernamePasswordAuthenticationToken(username, password);</span><br><span class="line">Authentication authenticate = authenticationManager.authenticate(token);</span><br><span class="line">SecurityContextHolder.getContext().setAuthentication(authenticate);</span><br></pre></td></tr></table></figure>
+          Authentication流程UsernamePasswordAuthenticationFilter认证流程
+FilterChainProxy Spring Security注入filter的代理，通过VirtualFilterChain进行filter的链式调用
+UsernamePasswordAuthenticationFilter 进行认证的filter(调用时传入的参数是username、password)，此filter会进行用户的认证，认证成功或时候是的逻辑执行
+AuthenticationManager 认证用户信息（实现类ProviderManager）
+Authentic
+          ...
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/11/14/Spring-Security原理理解/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1166,7 +990,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
