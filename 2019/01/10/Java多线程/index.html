@@ -118,7 +118,7 @@
 <meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread1.jpg">
 <meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread2.jpg">
 <meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread3.jpg">
-<meta property="og:updated_time" content="2019-01-14T12:14:12.322Z">
+<meta property="og:updated_time" content="2019-03-27T14:52:12.206Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程">
 <meta name="twitter:description" content="CPU缓存&amp;emsp;&amp;emsp;缓存用于解决CPU和主存之间的速度不匹配，由于部分缓存是线程私有，线程操作时只操作缓存中的数据，缓存中的数据从主存中COPY而来，因此会产生线程并发问题，下图是Intel Core i7缓存结构 缓存一致性&amp;emsp;&amp;emsp;由于缓存之间的数据无法保证是一致的，因此在同一个进程中启动多个线程或者进行CPU切换时看到的数据不一致，所以就导致了CPU缓存一致性的问">
@@ -376,7 +376,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-01-14 20:14:12" itemprop="dateModified" datetime="2019-01-14T20:14:12+08:00">2019-01-14</time>
+                <time title="Modified: 2019-03-27 22:52:12" itemprop="dateModified" datetime="2019-03-27T22:52:12+08:00">2019-03-27</time>
               
             
           </span>
@@ -424,12 +424,17 @@
 <li>如果缓存处于M或E的CPU读取到其他CPU有读操作，就把自己的缓存写入到内存中，并将自己的状态设置为S</li>
 <li>只有缓存状态是M或E的时候，CPU才可以修改缓存中的数据，修改后，缓存状态变为M</li>
 </ul>
+<h5 id="线程的3大性质"><a href="#线程的3大性质" class="headerlink" title="线程的3大性质"></a>线程的3大性质</h5><ul>
+<li>原子性：线程对一次数据操作中保证其他线程不能进行读写</li>
+<li>可见性：数据被写时刷新到内存，保证对其他的线程可见</li>
+<li>顺序性：代码编译和执行时，虚拟机会对指令做成相应的顺序调整以保证效率</li>
+</ul>
 <h3 id="synchronized原理"><a href="#synchronized原理" class="headerlink" title="synchronized原理"></a>synchronized原理</h3><p>&emsp;&emsp;这是我们常见的一种锁机制，属于悲观锁，由于有线程使用共享资源时，就认为会发生冲突，进行加锁，所以性能较差</p>
 <h4 id="当synchronized修饰函数时"><a href="#当synchronized修饰函数时" class="headerlink" title="当synchronized修饰函数时"></a>当synchronized修饰函数时</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 临界资源</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修饰对象，此对象有个线程修饰时，其当线程不能使用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add1</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread2.jpg" alt="synchronized修饰函数"><br>&emsp;&emsp;当synchronized修饰对象时，同步代码块会在代码中插入 monitorenter 和 monitorexist 指令</p>
 <h4 id="当synchronized修饰对象时"><a href="#当synchronized修饰对象时" class="headerlink" title="当synchronized修饰对象时"></a>当synchronized修饰对象时</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 临界资源</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修饰方法，此方法当前只能有一个线程调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/thread/Thread3.jpg" alt="synchronized修饰对象"><br>&emsp;&emsp;当synchronized修饰对象时，使用 ACC_SYNCHRONIZED 标记符隐示的实现，原理是通过方法调用指令检查该方法在常量池中是否包含 ACC_SYNCHRONIZED 标记符</p>
-<h3 id="volatile原理"><a href="#volatile原理" class="headerlink" title="volatile原理"></a>volatile原理</h3><p>&emsp;&emsp;volatile修饰属性，被此字段修饰的属性表示为内存可见（不保证原子性），不会发生指令重排，当一个线程修改时，其他线程去内存读取数据，相比于synchronized是轻量级的</p>
+<h3 id="volatile原理"><a href="#volatile原理" class="headerlink" title="volatile原理"></a>volatile原理</h3><p>&emsp;&emsp;volatile修饰属性，被此字段修饰的属性表示为内存可见（不保证原子性）和指令的顺序性，不会发生指令重排，当一个线程修改时，其他线程去内存读取数据，相比于synchronized是轻量级的。当一个属性被volatile修饰的时候，如果有多个线程对此进行操作时，写数据时会把需要写的数据同步到内存中，然后会再把刷新读线程，是的完成数据的可见行</p>
 <h3 id="CAS原理"><a href="#CAS原理" class="headerlink" title="CAS原理"></a>CAS原理</h3><p>&emsp;&emsp;全名compare and swap，常见的锁机制，属于乐观锁的一种，实现方式是基于硬件平台的汇编指令，在intel的CPU中，使用的是cmpxchg指令，就是说CAS是靠硬件实现的，从而在硬件层面提升效率，和内存中的老数据进行比较，如果相同则写入新的数据，老的数据不同时进行轮询，直到相同时进行写入<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用native方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4, <span class="keyword">int</span> var5)</span></span>;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;&emsp;上述方法为表native示调用C/C++代码，hotspot源码如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C/C++源码</span></span><br><span class="line">UNSAFE_ENTRY(jboolean, Unsafe_CompareAndSetInt(JNIEnv *env, jobject unsafe, jobject obj, jlong offset, jint e, jint x)) &#123;</span><br><span class="line">    oop p = JNIHandles::resolve(obj);</span><br><span class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">volatile</span> jint* addr = (<span class="keyword">volatile</span> jint*)index_oop_from_field_offset_long(p, offset);</span><br><span class="line">        <span class="keyword">return</span> RawAccess&lt;&gt;::atomic_cmpxchg(x, addr, e) == e;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        assert_field_offset_sane(p, offset);</span><br><span class="line">        <span class="keyword">return</span> HeapAccess&lt;&gt;::atomic_cmpxchg_at(x, p, (<span class="keyword">ptrdiff_t</span>)offset, e) == e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; UNSAFE_END</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;&emsp;有上述代码可知最终调用的方法atomic_cmpxchg，而此方法会根据不同的操作系统调用不同的接口</p>
@@ -481,6 +486,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/20/MySQL基础知识/" rel="prev" title="MySQL基础知识">
+                MySQL基础知识 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -552,7 +561,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -575,7 +584,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -610,7 +627,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU缓存"><span class="nav-number">1.</span> <span class="nav-text">CPU缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存一致性"><span class="nav-number">1.1.</span> <span class="nav-text">缓存一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#总线锁-bus-locking"><span class="nav-number">1.1.1.</span> <span class="nav-text">总线锁(bus locking)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MESI-modify、exclusive、share、invalid"><span class="nav-number">1.1.2.</span> <span class="nav-text">MESI(modify、exclusive、share、invalid)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized原理"><span class="nav-number">2.</span> <span class="nav-text">synchronized原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰函数时"><span class="nav-number">2.1.</span> <span class="nav-text">当synchronized修饰函数时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰对象时"><span class="nav-number">2.2.</span> <span class="nav-text">当synchronized修饰对象时</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile原理"><span class="nav-number">3.</span> <span class="nav-text">volatile原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS原理"><span class="nav-number">4.</span> <span class="nav-text">CAS原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS存在的问题"><span class="nav-number">4.1.</span> <span class="nav-text">CAS存在的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS（AbstractQueuedSynchronizer）"><span class="nav-number">5.</span> <span class="nav-text">AQS（AbstractQueuedSynchronizer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">7.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">8.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">9.</span> <span class="nav-text">ConcurrentHashMap</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU缓存"><span class="nav-number">1.</span> <span class="nav-text">CPU缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存一致性"><span class="nav-number">1.1.</span> <span class="nav-text">缓存一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#总线锁-bus-locking"><span class="nav-number">1.1.1.</span> <span class="nav-text">总线锁(bus locking)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MESI-modify、exclusive、share、invalid"><span class="nav-number">1.1.2.</span> <span class="nav-text">MESI(modify、exclusive、share、invalid)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#线程的3大性质"><span class="nav-number">1.1.3.</span> <span class="nav-text">线程的3大性质</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized原理"><span class="nav-number">2.</span> <span class="nav-text">synchronized原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰函数时"><span class="nav-number">2.1.</span> <span class="nav-text">当synchronized修饰函数时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当synchronized修饰对象时"><span class="nav-number">2.2.</span> <span class="nav-text">当synchronized修饰对象时</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile原理"><span class="nav-number">3.</span> <span class="nav-text">volatile原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS原理"><span class="nav-number">4.</span> <span class="nav-text">CAS原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS存在的问题"><span class="nav-number">4.1.</span> <span class="nav-text">CAS存在的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS（AbstractQueuedSynchronizer）"><span class="nav-number">5.</span> <span class="nav-text">AQS（AbstractQueuedSynchronizer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">6.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">7.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">8.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">9.</span> <span class="nav-text">ConcurrentHashMap</span></a></li></ol></div>
             
 
           </div>

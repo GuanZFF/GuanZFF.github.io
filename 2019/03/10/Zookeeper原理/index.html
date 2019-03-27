@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Zookeeper集群搭建以及用法 Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination.  本地集群服务搭建 到官网进行zookeeper下载 修改配置文件zookeeper.cfg，下面是">
+<meta name="keywords" content="java,分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper原理">
+<meta property="og:url" content="http://yoursite.com/2019/03/10/Zookeeper原理/index.html">
+<meta property="og:site_name" content="Z.F Blog">
+<meta property="og:description" content="Zookeeper集群搭建以及用法 Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination.  本地集群服务搭建 到官网进行zookeeper下载 修改配置文件zookeeper.cfg，下面是">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper1.jpg">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper2.jpg">
+<meta property="og:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper3.jpg">
+<meta property="og:updated_time" content="2019-03-27T17:39:52.884Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper原理">
+<meta name="twitter:description" content="Zookeeper集群搭建以及用法 Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination.  本地集群服务搭建 到官网进行zookeeper下载 修改配置文件zookeeper.cfg，下面是">
+<meta name="twitter:image" content="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/10/Zookeeper原理/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Zookeeper原理 | Z.F Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Z.F Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Overlook the distance</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/GuanZFF" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/10/Zookeeper原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GuanZF">
+      <meta itemprop="description" content="Overlook the distance, see clearly.">
+      <meta itemprop="image" content="/images/default-avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Z.F Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zookeeper原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-03-10 15:04:53" itemprop="dateCreated datePublished" datetime="2019-03-10T15:04:53+08:00">2019-03-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-03-28 01:39:52" itemprop="dateModified" datetime="2019-03-28T01:39:52+08:00">2019-03-28</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Zookeeper集群搭建以及用法"><a href="#Zookeeper集群搭建以及用法" class="headerlink" title="Zookeeper集群搭建以及用法"></a>Zookeeper集群搭建以及用法</h3><blockquote>
+<p>Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination.</p>
+</blockquote>
+<h4 id="本地集群服务搭建"><a href="#本地集群服务搭建" class="headerlink" title="本地集群服务搭建"></a>本地集群服务搭建</h4><ol>
+<li>到官网进行zookeeper<a href="https://www.apache.org/dyn/closer.cgi/zookeeper/" target="_blank" rel="noopener">下载</a></li>
+<li><p>修改配置文件zookeeper.cfg，下面是几点要注意的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 数据存放目录，在创建完成后需要创建一个myid文件，文件写入server id（数字）</span><br><span class="line">dataDir=/data/zookeeper/zk1</span><br><span class="line"># 表示集群中服务个数，用于过半机制的判断，server.id=ip:同步数据端口:选举端口</span><br><span class="line">server.1=localhost:2887:3887</span><br><span class="line">server.2=localhost:2888:3888</span><br><span class="line">server.3=localhost:2889:3889</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动zk集群服务，客户端进行连接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; zkServer.sh start 配置文件名称</span><br><span class="line">&gt; zkCli.sh -server 配置文件名称</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常用的命令</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">commandMap.put(<span class="string">"connect"</span>, <span class="string">"host:port"</span>);</span><br><span class="line">commandMap.put(<span class="string">"close"</span>,<span class="string">""</span>);</span><br><span class="line">commandMap.put(<span class="string">"create"</span>, <span class="string">"[-s] [-e] path data acl"</span>); <span class="comment">// 节点类型：ephemeral sequential</span></span><br><span class="line">commandMap.put(<span class="string">"delete"</span>,<span class="string">"path [version]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"rmr"</span>,<span class="string">"path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"set"</span>,<span class="string">"path data [version]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"get"</span>,<span class="string">"path [watch]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"ls"</span>,<span class="string">"path [watch]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"ls2"</span>,<span class="string">"path [watch]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"getAcl"</span>,<span class="string">"path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"setAcl"</span>,<span class="string">"path acl"</span>);</span><br><span class="line">commandMap.put(<span class="string">"stat"</span>,<span class="string">"path [watch]"</span>);</span><br><span class="line">commandMap.put(<span class="string">"sync"</span>,<span class="string">"path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"setquota"</span>,<span class="string">"-n|-b val path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"listquota"</span>,<span class="string">"path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"delquota"</span>,<span class="string">"[-n|-b] path"</span>);</span><br><span class="line">commandMap.put(<span class="string">"history"</span>,<span class="string">""</span>);</span><br><span class="line">commandMap.put(<span class="string">"redo"</span>,<span class="string">"cmdno"</span>);</span><br><span class="line">commandMap.put(<span class="string">"printwatches"</span>, <span class="string">"on|off"</span>);</span><br><span class="line">commandMap.put(<span class="string">"quit"</span>,<span class="string">""</span>);</span><br><span class="line">commandMap.put(<span class="string">"addauth"</span>, <span class="string">"scheme auth"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="集群角色"><a href="#集群角色" class="headerlink" title="集群角色"></a>集群角色</h4><ul>
+<li>领导者􏲩（Leader）：负责进行投票的发起和决议，最终更新状态。</li>
+<li>跟随者（Follower）：用于接收客户请求并返回客户结果，参与Leader发起的投票。</li>
+<li>观察者（Observer）：可以接收客户端连接，将请求转发给Leader，观察者不参与投票过程，只是同步leader状态</li>
+<li>学习者（Learner）：包含follower和observer</li>
+</ul>
+<h4 id="ZK节点类型"><a href="#ZK节点类型" class="headerlink" title="ZK节点类型"></a>ZK节点类型</h4><ul>
+<li>持久节点（PERSISTENT）：The znode will not be automatically deleted upon client’s disconnect.</li>
+<li>持久顺序节点（PERSISTENT_SEQUENTIAL）：The znode will not be automatically deleted upon client’s disconnect, and its name will be appended with a monotonically increasing number.</li>
+<li>临时节点（EPHEMERAL）：The znode will be deleted upon the client’s disconnect.</li>
+<li>临时顺序节点（EPHEMERAL_SEQUENTIAL）：The znode will be deleted upon the client’s disconnect, and its name will be appended with a monotonically increasing number.</li>
+</ul>
+<h4 id="ZK的watch机制"><a href="#ZK的watch机制" class="headerlink" title="ZK的watch机制"></a>ZK的watch机制</h4><blockquote>
+<p>a watch event is one-time trigger, sent to the client that set the watch, which occurs when the data for which the watch was set changes.</p>
+</blockquote>
+<p>&emsp;&emsp;服务端发现节点发生改变后，进行客户端通知，可一个通过ZK的这一特性实现分布式配置中心，当配置改变后进行客户端通知，也可以用于分布式锁实现，当前获取到锁的线程释放后服务端可以进行通知下一个服务进行锁的获取</p>
+<h3 id="Zookeeper单机模式下的client和server"><a href="#Zookeeper单机模式下的client和server" class="headerlink" title="Zookeeper单机模式下的client和server"></a>Zookeeper单机模式下的client和server</h3><p>&emsp;&emsp;客户端和服务端采用NIO方式进行数据读写，分别由类ClientCnxnSocketNIO, NIOServerCnxn完成发送和接收数据。<br>客户端主要线程：</p>
+<ul>
+<li>sendThread：用于发送和接收packet，主要处理的队列outgoingQueue</li>
+<li>eventThread：用于事件处理，主要处理队列waitingEvents</li>
+</ul>
+<p>服务端主要线程：</p>
+<ul>
+<li>PrepRequestProcessor：用于创建事务</li>
+<li>SyncRequestProcessor：用于同步事务到磁盘，并且进行快照处理</li>
+<li>FinalRequestProcessor：用于请求处理</li>
+</ul>
+<h4 id="ZK的client原理"><a href="#ZK的client原理" class="headerlink" title="ZK的client原理"></a>ZK的client原理</h4><p>&emsp;&emsp;zookeeper可以通过zkCli.sh命令进行启动，在代码调试时也可以通过ZooKeeperMain的main方法进行启动，启动后通过zookeeper类创建ClientCnxn并启动，在这个启动过程中会启动两个线程sendThread、eventThread，启动成功后两个线程分别负责packet的发送和事件的处理，在这个处理过程中有几个关键队列outgoingQueue由于存放packet，waitingEvents用于事件的存放</p>
+<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper1.jpg" alt="zookeeper client原理"></p>
+<ul>
+<li>调用ZooKeeperMain.main()进行客户端启动</li>
+<li>调用ZooKeeper进行和zookeeper server建立连接</li>
+<li>启动线程sendThread和eventThread用于消息处理</li>
+</ul>
+<h4 id="ZK的server原理"><a href="#ZK的server原理" class="headerlink" title="ZK的server原理"></a>ZK的server原理</h4><p>&emsp;&emsp;zookeeper server用于接收处理zkCli发送的消息。启动时可以通过zkServer.sh命令启动，同时也可以通过QuorumPeerMain的main方法进行启动启动时需要指定配置文件，此类会根据配置文件中的server.id进行判断是单机还是集群模式启动，单机zk启动时会启动三个RequestProcessor分别用于处理事务创建、持久、业务处理，在启动时也会把消息读进内存中ZKDatabase，用于消息发送和接收的类NIOServerCnxn</p>
+<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper2.jpg" alt="zookeeper server原理"></p>
+<ul>
+<li>调用QuorumPeerMain.main()根据配置文件中servers.size() &gt; 0判断是启动单机模式还是集群模式</li>
+<li>调用ZooKeeperServerMain.runFromConfig()创建ZooKeeperServer和NIOServerCnxnFactory进行配置</li>
+<li>调用NIOServerCnxnFactory.startup()启动线程NIOServerCnxnFactory用于建立和client连接，调用NIOServerCnxn.doIO()进行消息发送和接收</li>
+<li>调用ZooKeeperServer进行数据加载以及RequestProcessor线程创建，PrepRequestProcessor -&gt; SyncRequestProcessor -&gt; FinalRequestProcessor</li>
+</ul>
+<h3 id="Zookeeper集群"><a href="#Zookeeper集群" class="headerlink" title="Zookeeper集群"></a>Zookeeper集群</h3><h4 id="ZK集群修改数据时投票机制"><a href="#ZK集群修改数据时投票机制" class="headerlink" title="ZK集群修改数据时投票机制"></a>ZK集群修改数据时投票机制</h4><p><strong>若接收者是leader时</strong>，则leader会发起提议给集群中的follower，当集群中的follower接收到leader发起的提议后，就会进行相关的操作如果操作成功则给leader一个ACK通知，当leader接收的follower的ACK超过一半的时候则会对这次提议进行存储，同时同步数据给其他learner<br><strong>若接收者是follower或observer时</strong>，则follower则会把这次请求转发给leader，之后leader就会按照第一步执行，observer也是同样也是通过转发给leader，由leader进行发起提议</p>
+<p><img src="https://guanzff-markdown.oss-cn-beijing.aliyuncs.com/zookeeper/zookeeper3.jpg" alt="zookeeper client原理"></p>
+<h4 id="ZK集群领导者选举算法"><a href="#ZK集群领导者选举算法" class="headerlink" title="ZK集群领导者选举算法"></a>ZK集群领导者选举算法</h4><p>&emsp;&emsp;zookeeper中有投票和选举权的follower，当ZK集群开始启动的时候，就会进行集群中leader的选举，选举开始时每台服务器都会把票投给自己，然后把票发给集群中的其他服务器，当其他服务器接收到此票时，就会进行票的比对选择能力较强的服务器当作leader，然后同步数据给其他服务器，当能力投票箱中的某个服务器的票数过半时则选举程leader，票的比较则是先比较届号、然后zxid（事务ID）、最后比较myid中的文件，由于myid文件中的皮质本上就是不一样的，所以最终一定能成功选出leader。<br><strong>选举中的过半机制</strong>：当在投票箱中的某台服务器的票数大于有选举权服务器的一半时，这台服务器将被选举成leader</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 服务器用于的的状态，LOOKING正在选举</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ServerState &#123;</span><br><span class="line">    LOOKING, FOLLOWING, LEADING, OBSERVING;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * A peer can either be participating, which implies that it is willing to</span></span><br><span class="line"><span class="comment"> * both vote in instances of consensus and to elect or become a Leader, or</span></span><br><span class="line"><span class="comment"> * it may be observing in which case it isn't.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * We need this distinction to decide which ServerState to move to when </span></span><br><span class="line"><span class="comment"> * conditions change (e.g. which state to become after LOOKING). </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> LearnerType &#123;</span><br><span class="line">    PARTICIPANT, OBSERVER;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>领导者选举算法中比较投票箱中票数大小的算法，第一比较epoch，第二比较zxid，第三比较serverid<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">totalOrderPredicate</span><span class="params">(<span class="keyword">long</span> newId, <span class="keyword">long</span> newZxid, <span class="keyword">long</span> newEpoch, <span class="keyword">long</span> curId, <span class="keyword">long</span> curZxid, <span class="keyword">long</span> curEpoch)</span> </span>&#123;</span><br><span class="line">    LOG.debug(<span class="string">"id: "</span> + newId + <span class="string">", proposed id: "</span> + curId + <span class="string">", zxid: 0x"</span> +</span><br><span class="line">            Long.toHexString(newZxid) + <span class="string">", proposed zxid: 0x"</span> + Long.toHexString(curZxid));</span><br><span class="line">    <span class="keyword">if</span>(self.getQuorumVerifier().getWeight(newId) == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * We return true if one of the following three cases hold:</span></span><br><span class="line"><span class="comment">     * 1- New epoch is higher</span></span><br><span class="line"><span class="comment">     * 2- New epoch is the same as current epoch, but new zxid is higher</span></span><br><span class="line"><span class="comment">     * 3- New epoch is the same as current epoch, new zxid is the same</span></span><br><span class="line"><span class="comment">     *  as current zxid, but server id is higher.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ((newEpoch &gt; curEpoch) || </span><br><span class="line">            ((newEpoch == curEpoch) &amp;&amp;</span><br><span class="line">            ((newZxid &gt; curZxid) || ((newZxid == curZxid) &amp;&amp; (newId &gt; curId)))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Zookeeper应用"><a href="#Zookeeper应用" class="headerlink" title="Zookeeper应用"></a>Zookeeper应用</h3><h4 id="使用ZK进行分布式锁的搭建"><a href="#使用ZK进行分布式锁的搭建" class="headerlink" title="使用ZK进行分布式锁的搭建"></a>使用ZK进行分布式锁的搭建</h4><h4 id="使用ZK作分布式配置文件"><a href="#使用ZK作分布式配置文件" class="headerlink" title="使用ZK作分布式配置文件"></a>使用ZK作分布式配置文件</h4>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/20/MySQL基础知识/" rel="next" title="MySQL基础知识">
+                <i class="fa fa-chevron-left"></i> MySQL基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/Linux下java调用C语言/" rel="prev" title="Linux下java调用C语言">
+                Linux下java调用C语言 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/default-avatar.jpeg" alt="GuanZF">
+            
+              <p class="site-author-name" itemprop="name">GuanZF</p>
+              <p class="site-description motion-element" itemprop="description">Overlook the distance, see clearly.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper集群搭建以及用法"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper集群搭建以及用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地集群服务搭建"><span class="nav-number">1.1.</span> <span class="nav-text">本地集群服务搭建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群角色"><span class="nav-number">1.2.</span> <span class="nav-text">集群角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK节点类型"><span class="nav-number">1.3.</span> <span class="nav-text">ZK节点类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK的watch机制"><span class="nav-number">1.4.</span> <span class="nav-text">ZK的watch机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper单机模式下的client和server"><span class="nav-number">2.</span> <span class="nav-text">Zookeeper单机模式下的client和server</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK的client原理"><span class="nav-number">2.1.</span> <span class="nav-text">ZK的client原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK的server原理"><span class="nav-number">2.2.</span> <span class="nav-text">ZK的server原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper集群"><span class="nav-number">3.</span> <span class="nav-text">Zookeeper集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK集群修改数据时投票机制"><span class="nav-number">3.1.</span> <span class="nav-text">ZK集群修改数据时投票机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZK集群领导者选举算法"><span class="nav-number">3.2.</span> <span class="nav-text">ZK集群领导者选举算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper应用"><span class="nav-number">4.</span> <span class="nav-text">Zookeeper应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ZK进行分布式锁的搭建"><span class="nav-number">4.1.</span> <span class="nav-text">使用ZK进行分布式锁的搭建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ZK作分布式配置文件"><span class="nav-number">4.2.</span> <span class="nav-text">使用ZK作分布式配置文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuanZF</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
